@@ -1,7 +1,7 @@
 #' @rdname get_model_parameter
 #' @importFrom methods setMethod new
 #' @importFrom tibble rownames_to_column
-#' @importFrom dplyr data_frame rowwise mutate_ filter_ select_ left_join mutate_ bind_rows transmute_ semi_join
+#' @importFrom dplyr data_frame rowwise mutate_ filter_ select_ left_join mutate_ bind_rows transmute_ semi_join ungroup
 #' @importFrom digest sha1
 #' @importFrom INLA inla.tmarginal inla.qmarginal
 #' @importFrom assertthat assert_that is.flag noNA
@@ -414,7 +414,8 @@ setMethod(
       mutate_(
         Fingerprint = ~sha1(c(Description = Description, Parent = Parent))
       ) %>%
-      bind_rows(parameter)
+      bind_rows(parameter) %>%
+      ungroup()
     tmp <- fitted %>%
       inner_join(parameter, by = c("Parent", "Parameter" = "Description")) %>%
       select_(~-Parent, ~-Parameter, Parameter = ~Fingerprint)
