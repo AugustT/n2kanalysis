@@ -416,10 +416,10 @@ setMethod(
       ) %>%
       bind_rows(parameter) %>%
       ungroup()
-    tmp <- fitted %>%
+    fitted <- fitted %>%
       inner_join(parameter, by = c("Parent", "Parameter" = "Description")) %>%
       select_(~-Parent, ~-Parameter, Parameter = ~Fingerprint)
-    parameter.estimate <- bind_rows(tmp, parameter.estimate)
+    parameter.estimate <- bind_rows(fitted, parameter.estimate)
 
     # imputed values
     if (!is.null(analysis@RawImputed)) {
