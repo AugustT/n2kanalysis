@@ -416,9 +416,13 @@ setMethod(
       ) %>%
       bind_rows(parameter) %>%
       ungroup()
+    cat("\nbefore\n")
+    print(sapply(fitted, class))
+    print(sapply(parameter, class))
     fitted <- fitted %>%
       inner_join(parameter, by = c("Parent", "Parameter" = "Description")) %>%
       select_(~-Parent, ~-Parameter, Parameter = ~Fingerprint)
+    cat("\nafter\n")
     parameter.estimate <- bind_rows(fitted, parameter.estimate)
 
     # imputed values
